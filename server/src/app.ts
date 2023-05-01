@@ -2,6 +2,8 @@ import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
 
+import { sendResponse } from "./utils/utilities";
+
 const app = express();
 const connectionString = process.env.CONNECTION_STRING || "";
 const port = process.env.PORT;
@@ -16,9 +18,7 @@ app.use(
 );
 
 app.get("/health", (req, res) => {
-  res
-    .status(200)
-    .send({ status: "success", message: "Server connected!", data: {} });
+  sendResponse(res, "success", "Server working!", {}, 200);
 });
 
 async function startServer() {
