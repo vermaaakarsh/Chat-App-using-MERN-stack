@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import { RequestHandler } from "express";
+import jwt from "jsonwebtoken";
 
 import { IUser } from "../interfaces/IUser";
 import User from "../models/user";
@@ -25,6 +26,40 @@ export const registerUser: RequestHandler = async (req, res) => {
       );
     } else {
       return sendResponse(res, "error", "Registration failed!", {}, 400);
+    }
+  } catch (error: any) {
+    console.log(error);
+    return sendResponse(res, "error", "Internal server error!", {}, 500);
+  }
+};
+
+export const loginUser: RequestHandler = async (req, res) => {
+  try {
+    const userDetails: { email: string; passwrod: string } = {
+      email: req.body.email,
+      passwrod: req.body.password,
+    };
+
+    const user = await User.findOne({ email: userDetails.email });
+    if (!user) {
+      return sendResponse(res, "error", "Email doesn't exists!", {}, 404);
+    }
+    const status = await bcrypt.compare(userDetails.passwrod, user.password);
+    if (status) {
+      const token = jwt.sign(
+        { userId: user._id },
+        process.env.SECRET_KEY || "",
+        { expiresIn: "1h" }
+      );
+      return sendResponse(
+        res,
+        "success",
+        "Logged In successfully!",
+        { token },
+        200
+      );
+    } else {
+      return sendResponse(res, "error", "Credentials mismatched!", {}, 401);
     }
   } catch (error: any) {
     console.log(error);
