@@ -15,6 +15,9 @@ export const validatedObjectToRegisterUser: RequestHandler = async (
     await check("password")
       .matches(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/)
       .run(req);
+    if (req.body.profilePic) {
+      await check("profilePic").isString().run(req);
+    }
 
     const _result = validationResult(req);
     if (!_result.isEmpty()) {

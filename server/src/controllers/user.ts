@@ -30,3 +30,29 @@ export const getUser: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+export const updateUser: RequestHandler = async (req, res, next) => {
+  try {
+    const userId: string = req.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return sendResponse(res, "error", "User doesn't exists!", {}, 404);
+    }
+    user.username = req.body.username;
+    user.profilePic = req.body.profilePic;
+    const updatedUser = await user.save();
+    if (updatedUser) {
+      return sendResponse(
+        res,
+        "success",
+        "Details updated successfully!",
+        { userId: updatedUser._id },
+        201
+      );
+    } else {
+      return sendResponse(res, "error", "Registration failed!", {}, 400);
+    }
+  } catch (error: any) {
+    next(error);
+  }
+};
