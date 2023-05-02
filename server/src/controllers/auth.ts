@@ -6,7 +6,7 @@ import { IUser } from "../interfaces/IUser";
 import User from "../models/user";
 import { sendResponse } from "../utils/utilities";
 
-export const registerUser: RequestHandler = async (req, res) => {
+export const registerUser: RequestHandler = async (req, res, next) => {
   try {
     const encryptedPassword = await bcrypt.hash(req.body.password, 13);
     const _userObj: IUser = {
@@ -28,12 +28,11 @@ export const registerUser: RequestHandler = async (req, res) => {
       return sendResponse(res, "error", "Registration failed!", {}, 400);
     }
   } catch (error: any) {
-    console.log(error);
-    return sendResponse(res, "error", "Internal server error!", {}, 500);
+    next(error);
   }
 };
 
-export const loginUser: RequestHandler = async (req, res) => {
+export const loginUser: RequestHandler = async (req, res, next) => {
   try {
     const userDetails: { email: string; passwrod: string } = {
       email: req.body.email,
@@ -62,7 +61,6 @@ export const loginUser: RequestHandler = async (req, res) => {
       return sendResponse(res, "error", "Credentials mismatched!", {}, 401);
     }
   } catch (error: any) {
-    console.log(error);
-    return sendResponse(res, "error", "Internal server error!", {}, 500);
+    next(error);
   }
 };

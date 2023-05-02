@@ -1,11 +1,12 @@
 import { Response } from "express";
+import { IResponse } from "../interfaces/IResponse";
 
 export const getResponseObject = (
   status: "success" | "error",
   message: string,
   data: {} | []
 ) => {
-  const _resp = {
+  const _resp: IResponse = {
     status,
     message,
     data,
