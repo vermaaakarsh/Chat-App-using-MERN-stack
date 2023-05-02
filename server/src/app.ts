@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import authRoutes from "./routers/auth";
 import ProjectError from "./helpers/error";
 import { IResponse } from "./interfaces/IResponse";
+import userRoutes from "./routers/user";
 import { sendResponse } from "./utils/utilities";
 
 const app = express();
@@ -22,6 +23,7 @@ app.use(
 );
 
 app.use("/auth", authRoutes);
+app.use("/user", userRoutes);
 
 app.get("/health", (req, res) => {
   return sendResponse(res, "success", "Server working!", {}, 200);
@@ -35,10 +37,10 @@ app.use(
       message = error.message;
       statusCode = error.statusCode;
     } else {
+      console.log(error);
       message = "Something went wrong please try after sometime!";
       statusCode = 500;
     }
-
     const resp: IResponse = { status: "error", message, data: {} };
     if (error.data) {
       resp.data = error.data;
