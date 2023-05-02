@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
 
+import authRoutes from "./routers/auth";
 import { sendResponse } from "./utils/utilities";
 
 const app = express();
@@ -17,8 +18,10 @@ app.use(
   })
 );
 
+app.use("/auth", authRoutes);
+
 app.get("/health", (req, res) => {
-  sendResponse(res, "success", "Server working!", {}, 200);
+  return sendResponse(res, "success", "Server working!", {}, 200);
 });
 
 async function startServer() {
