@@ -5,6 +5,8 @@ export type IUser = {
   username: string;
   email: string;
   password: string;
+  profilePic?: string;
+  isAdmin?: boolean;
   isActive?: boolean;
   isDeleted?: boolean;
 };

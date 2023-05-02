@@ -16,6 +16,14 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
+    profilePic: {
+      type: String,
+      default: "",
+    },
     isActive: {
       type: Boolean,
       default: true,
